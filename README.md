@@ -10,7 +10,7 @@ The web app is a township complaint system designed to provide a platform for re
 - [Mongodb](https://www.mongodb.com/docs/manual/administration/install-community/)
  
  - npm install react-router
- - and also install scripts
+ - and also install react-scripts
 Both should be installed and make sure mongodb is running.
 
 ```shell
