@@ -1,10 +1,7 @@
-# Snappy - Chat Application 
-Snappy is chat application build with the power of MERN Stack. You can find the tutorial [here](https://www.youtube.com/watch?v=otaQKODEUFs)
-
-
-![login page](./images/snappy_login.png)
-
-![home page](./images/snappy.png)
+# Resolver - Town Complaint System
+The web app is a township complaint system designed to provide a platform for residents to report and address issues within their community.
+ It serves as a centralized hub where users can submit complaints, interact with the respective authorities, and track the progress of their complaints.
+ It has an integrated chat application that enables users to have direct communication with the authorities handling their complaints.
 
 ## Installation Guide
 
