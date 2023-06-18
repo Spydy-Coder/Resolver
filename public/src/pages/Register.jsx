@@ -22,6 +22,7 @@ export default function Register() {
     email: "",
     password: "",
     confirmPassword: "",
+    role: "",
   });
 
   // useEffect is called only once since dependency array is empty
@@ -66,11 +67,12 @@ export default function Register() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (handleValidation()) {
-      const { email, username, password } = values;
+      const { email, username, password, role } = values;
       const {data} = await axios.post(registerRoute, {
         username,
         email,
         password,
+        role,
       });
       console.log(data);
       if (data.status === false) {
@@ -86,6 +88,31 @@ export default function Register() {
     }
   };
 
+  // let roleuser1 = document.getElementById('roleuser');
+  // let roleadmin1 = document.getElementById('roleadmin');
+
+  const changetype =  (event)=>{
+    console.log(event.target.name, event.target.value);
+    // if(event.target.value==="user"){
+    //   roleuser1.style.backgroundColor = 'rgba(116, 89, 191, 1)';
+    //   roleadmin1.style.backgroundColor= '#131324';
+    // }
+    // else{
+    //   roleadmin1.style.backgroundColor = 'rgba(116, 89, 191, 1)';
+    //   roleuser1.style.backgroundColor = '#131324';
+
+    // }
+    setValues({ ...values, [event.target.name]: event.target.value });
+
+  }
+  
+
+  // roleuser1.addEventListener('click', function onClick() {
+  //   roleuser1.style.backgroundColor = 'salmon';
+  //   roleadmin1.style.backgroundColor = 'transparent';
+    
+  // });
+
   return (
     <>
       <FormContainer>
@@ -94,6 +121,24 @@ export default function Register() {
             <img src={Logo} alt="logo" />
             <h1>RESOLVER</h1>
           </div>
+          <div className="roletype">
+          <input 
+            type="button" 
+            name="role"
+            value="user"
+            id="roleuser"
+            onClick={(e) => changetype(e)}
+
+          />
+          <input 
+            type="button" 
+            name="role"
+            value="admin"
+            id="roleadmin"
+            onClick={(e) => changetype(e)}
+          />
+          </div>
+          
           <input
             type="text"
             placeholder="Username"
@@ -160,6 +205,7 @@ const FormContainer = styled.div`
     border-radius: 2rem;
     padding: 3rem 5rem;
   }
+
   input {
     background-color: transparent;
     padding: 1rem;
@@ -173,6 +219,16 @@ const FormContainer = styled.div`
       outline: none;
     }
   }
+  .roletype{
+    display: flex;
+    flex-direction: row;
+  }
+  /* #roleuser:active{
+    background-color: #4e0eff;
+  }
+  #roleadmin:active{
+    background-color: #4e0eff;
+  } */
   button {
     background-color: #4e0eff;
     color: white;
