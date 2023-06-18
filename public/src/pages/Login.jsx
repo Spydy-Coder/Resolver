@@ -6,10 +6,9 @@ import Logo from "../assets/logo.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { loginRoute } from "../utils/APIRoutes";
-
 export default function Login() {
   const navigate = useNavigate();
-  const [values, setValues] = useState({ username: "", password: "" });
+  const [values, setValues] = useState({ username: "", password: "", role:""});
   const toastOptions = {
     position: "bottom-right",
     autoClose: 8000,
@@ -42,10 +41,11 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateForm()) {
-      const { username, password } = values;
+      const { username, password, role } = values;
       const { data } = await axios.post(loginRoute, {
         username,
         password,
+        role,
       });
       if (data.status === false) {
         toast.error(data.msg, toastOptions);
@@ -68,6 +68,23 @@ export default function Login() {
           <div className="brand">
             <img src={Logo} alt="logo" />
             <h1>Resolver</h1>
+          </div>
+          <div className="roletype">
+          <input 
+            type="button" 
+            name="role"
+            value="user"
+            id="roleuser"
+            onClick={(e) => handleChange(e)}
+
+          />
+          <input 
+            type="button" 
+            name="role"
+            value="admin"
+            id="roleadmin"
+            onClick={(e) => handleChange(e)}
+          />
           </div>
           <input
             type="text"
@@ -123,6 +140,7 @@ const FormContainer = styled.div`
     background-color: #00000076;
     border-radius: 2rem;
     padding: 5rem;
+    
   }
   input {
     background-color: transparent;
@@ -137,6 +155,10 @@ const FormContainer = styled.div`
       outline: none;
     }
   }
+  .roletype{
+      display:flex;
+      flex-direction: row;
+    }
   button {
     background-color: #4e0eff;
     color: white;
@@ -160,4 +182,26 @@ const FormContainer = styled.div`
       font-weight: bold;
     }
   }
+
+  @media screen and (max-width: 768px) {
+    .brand {
+      flex-direction: column;
+      align-items: flex-start;
+      
+      img {
+        height: 3rem;
+      }
+    }
+    
+    form {
+      padding: 3rem;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    form {
+      padding: 2rem;
+    }
+  }
+
 `;
