@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Logo from "../assets/logo.png";
+import { Avatar, ClickAwayListener, IconButton } from "@material-ui/core";
+import DonutLargeIcon from '@mui/icons-material/DonutLarge'
+
+//write a function for broadcast message
 
 export default function Contacts({ contacts, changeChat }) {
   const [currentUserName, setCurrentUserName] = useState(undefined);
@@ -24,6 +28,15 @@ export default function Contacts({ contacts, changeChat }) {
           <div className="brand">
             <img src={Logo} alt="logo" />
             <h3>Resolver</h3>
+            <IconButton
+            onClick={() =>
+              alert(
+                "Not added this functionality.\nClick on three dots to logout and add new room."
+              )
+            }
+          >
+          <DonutLargeIcon className="donut"/>
+          </IconButton>
           </div>
           <div className="contacts">
             {contacts.map((contact, index) => {
@@ -81,6 +94,10 @@ const Container = styled.div`
       color: white;
       text-transform: uppercase;
     }
+    .donut{
+   color: white;
+   
+  }
   }
   .contacts {
     display: flex;
@@ -149,4 +166,5 @@ const Container = styled.div`
       }
     }
   }
+  
 `;
