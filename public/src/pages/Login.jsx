@@ -6,7 +6,15 @@ import Logo from "../assets/logo.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { loginRoute } from "../utils/APIRoutes";
+import { setadmin, setuser } from "../actions/index";
+import { useSelector,useDispatch } from "react-redux";
+
+
 export default function Login() {
+  // const mystate = useSelector((state)=>{return state.setrole});
+  // mystate contains the current user type whether it is user or admin
+  
+  const dispatch= useDispatch();
   const navigate = useNavigate();
   const [values, setValues] = useState({ username: "", password: "", role:""});
   const toastOptions = {
@@ -51,6 +59,13 @@ export default function Login() {
         toast.error(data.msg, toastOptions);
       }
       if (data.status === true) {
+        if(role=="admin"){
+          dispatch(setadmin());
+        }
+        else{
+          dispatch(setuser());
+        }
+        
         localStorage.setItem(
           process.env.REACT_APP_LOCALHOST_KEY,
           JSON.stringify(data.user)
