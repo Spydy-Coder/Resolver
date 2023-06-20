@@ -7,9 +7,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { registerRoute } from "../utils/APIRoutes";
 import { BiColor } from "react-icons/bi";
+import { setadmin,setuser } from "../actions/index";
+import { useSelector,useDispatch } from "react-redux";
 
 export default function Register() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
   const toastOptions = {
     position: "bottom-right",
     autoClose: 8000,
@@ -79,6 +83,13 @@ export default function Register() {
         toast.error(data.msg, toastOptions);
       }
       if (data.status === true) {
+        if(role==="admin"){
+          dispatch(setadmin());
+        }
+        else{
+          dispatch(setuser());
+        }
+        
         localStorage.setItem(
           process.env.REACT_APP_LOCALHOST_KEY,
           JSON.stringify(data.user)

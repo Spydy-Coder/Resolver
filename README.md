@@ -11,7 +11,9 @@ The web app is a township complaint system designed to provide a platform for re
  
  - npm install react-router
  - and also install react-scripts
- - Both should be installed and make sure mongodb is running.
+ - npm i react-redux redux 
+ - this redux library should be installed in server and cient(public) side both
+ - Both should be installed and make sure mongodb is running. 
 
 ```shell
 git clone https://github.com/koolkishan/chat-app-react-nodejs
