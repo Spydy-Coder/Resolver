@@ -1,13 +1,30 @@
 const User = require("../models/userModel");
 const Admin = require("../models/adminModel");
 const bcrypt = require("bcrypt");
+const {createStore} = require('redux');
+
+const intialState="";
+const reducer = (state=intialState,action)=>{
+    switch(action.type){
+      case "admin":
+        return "admin";
+      case "user":
+        return "user";
+      default: 
+      return state;
+    }
+}
+const store = createStore(reducer);
+
+store.subscribe(()=>{console.log(store.getState())})
 
 module.exports.login = async (req, res, next) => {
   try {
-    console.log("Server side");
+    
     const { username, password, role } = req.body;
     let user="";
     if(role==="admin"){
+      store.dispatch({type:"admin"}); // saving the state in global store
       user = await Admin.findOne({ username });
       if (!user)
         return res.json({ msg: "Incorrect Username or Password", status: false });
@@ -17,6 +34,7 @@ module.exports.login = async (req, res, next) => {
       delete user.password;
     }
     else{
+      store.dispatch({type:"user"});
         user = await User.findOne({ username });
         if (!user)
           return res.json({ msg: "Incorrect Username or Password", status: false });
@@ -30,12 +48,13 @@ module.exports.login = async (req, res, next) => {
     next(ex);
   }
 };
-global.data=5;
+
 module.exports.register = async (req, res, next) => {
   try {
     const { username, email, password, role } = req.body;
     let user;
     if(role==="admin"){
+      store.dispatch({type:"admin"});
       const usernameCheck = await Admin.findOne({ username });
       if (usernameCheck)
         return res.json({ msg: "Username already used", status: false });
@@ -53,6 +72,7 @@ module.exports.register = async (req, res, next) => {
     }
     else{
       // it means user
+      store.dispatch({type:"user"});
       const usernameCheck = await User.findOne({ username });
       if (usernameCheck)
         return res.json({ msg: "Username already used", status: false });
@@ -79,17 +99,8 @@ module.exports.getAllUsers = async (req, res, next) => {
   try {
       
       let users;
-      let role_obj_user= await User.find({ _id: req.params.id  });
-      let role_obj_admin= await Admin.find({_id : req.params.id});
-      console.log(role_obj_admin.length);
-      console.log(role_obj_user.length);
-      let role;
-      if(role_obj_admin.length===0){
-        role=role_obj_user[0].role;
-      }
-      else{
-        role=role_obj_admin[0].role;
-      }
+      const role = store.getState(); // extracting from global store
+
       if(role==="admin")
       {
         // if it is admin then show all the users and their complaints in contacts
@@ -122,6 +133,9 @@ module.exports.setAvatar = async (req, res, next) => {
     const avatarImage = req.body.image;
     let userData;
 
+    const role = store.getState();
+
+    if(role==="admin"){
       userData = await Admin.findByIdAndUpdate(
         userId,
         {
@@ -130,19 +144,18 @@ module.exports.setAvatar = async (req, res, next) => {
         },
         { new: true }
       );
-      if(!userData){
+    }
+    else{
+      userData = await User.findByIdAndUpdate(
+        userId,
+        {
+          isAvatarImageSet: true,
+          avatarImage,
+        },
+        { new: true }
+      );
+    }
 
-        userData = await User.findByIdAndUpdate(
-          userId,
-          {
-            isAvatarImageSet: true,
-            avatarImage,
-          },
-          { new: true }
-        );
-      }
-      
-    
     return res.json({
       isSet: userData.isAvatarImageSet,
       image: userData.avatarImage,
